@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
 
 namespace Snap.Core.Logging
@@ -19,6 +20,12 @@ namespace Snap.Core.Logging
             [CallerFilePath] string? callerFilePath = null)
         {
             Logger.Instance.LogInternal(info, formatter, callerMemberName, callerLineNumber, callerFilePath);
+        }
+
+        public static void WriteToDesktopFile<T>(this T obj, string? info,string fileName)
+        {
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            File.WriteAllText(Path.Combine(desktopPath, fileName), info);
         }
     }
 }
