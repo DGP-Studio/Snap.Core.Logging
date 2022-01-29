@@ -22,7 +22,8 @@ namespace Snap.Core.Logging
             Logger.Instance.LogInternal(info, formatter, callerMemberName, callerLineNumber, callerFilePath);
         }
 
-        public static void WriteToDesktopFile<T>(this T obj, string? info,string fileName)
+        [Conditional("DEBUG")]
+        public static void WriteToDesktopFile<T>(this T obj, string? info, string fileName)
         {
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             File.WriteAllText(Path.Combine(desktopPath, fileName), info);
