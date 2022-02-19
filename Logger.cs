@@ -7,6 +7,9 @@ namespace Snap.Core.Logging
 {
     public class Logger
     {
+        private string? lastCallerFilePath;
+        private string? lastCallerMemberName;
+
         /// <summary>
         /// 核心日志方法
         /// </summary>
@@ -18,19 +21,36 @@ namespace Snap.Core.Logging
         internal void LogInternal(object? info, Func<object?, string>? formatter = null,
             string? callerMemberName = null, int? callerLineNumber = null, string? callerFilePath = null)
         {
+            //pre format string
             if (formatter != null)
             {
                 info = formatter.Invoke(info);
             }
+            //trim callerFilePath
             if (callerFilePath is not null)
             {
                 int pos = callerFilePath.IndexOf("Snap.Genshin", StringComparison.Ordinal);
                 callerFilePath = callerFilePath[pos..];
-                callerFilePath = callerFilePath.Replace('\\', '>');
             }
 
-            string log = $"{DateTime.Now:u}|{callerFilePath}|Line:{callerLineNumber}|{callerMemberName}|\n{info}";
-            Debug.WriteLine(log);
+            if (callerMemberName != lastCallerMemberName || callerFilePath != lastCallerFilePath)
+            {
+                string log = $"{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} | {callerFilePath} | {callerMemberName} |\n[Line:{callerLineNumber,6}] {info}";
+
+                if (lastCallerFilePath != callerFilePath)
+                {
+                    Debug.Write('\n');
+                }
+                
+                Debug.WriteLine(log);
+            }
+            else
+            {
+                Debug.WriteLine($"[Line:{callerLineNumber,6}] {info}");
+            }
+
+            lastCallerMemberName = callerMemberName;
+            lastCallerFilePath = callerFilePath;
         }
 
         public static void LogStatic(object? info, Func<object?, string>? formatter = null,
