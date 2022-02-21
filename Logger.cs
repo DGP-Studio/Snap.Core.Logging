@@ -41,7 +41,7 @@ namespace Snap.Core.Logging
                 {
                     Debug.Write('\n');
                 }
-                
+
                 Debug.WriteLine(log);
             }
             else
