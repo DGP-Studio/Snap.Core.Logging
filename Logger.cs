@@ -33,7 +33,11 @@ namespace Snap.Core.Logging
                 callerFilePath = callerFilePath[pos..];
             }
 
-            if (callerMemberName != lastCallerMemberName || callerFilePath != lastCallerFilePath)
+            if (callerMemberName == lastCallerMemberName && callerFilePath == lastCallerFilePath)
+            {
+                Debug.WriteLine($"[Line:{callerLineNumber,6}] {info}");
+            }
+            else
             {
                 string log = $"{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} | {callerFilePath} | {callerMemberName} |\n[Line:{callerLineNumber,6}] {info}";
 
@@ -43,10 +47,6 @@ namespace Snap.Core.Logging
                 }
 
                 Debug.WriteLine(log);
-            }
-            else
-            {
-                Debug.WriteLine($"[Line:{callerLineNumber,6}] {info}");
             }
 
             lastCallerMemberName = callerMemberName;
