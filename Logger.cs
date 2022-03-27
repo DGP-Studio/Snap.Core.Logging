@@ -33,7 +33,7 @@ namespace Snap.Core.Logging
                 callerFilePath = callerFilePath[pos..];
             }
 
-            if (callerMemberName == lastCallerMemberName && callerFilePath == lastCallerFilePath)
+            if (callerMemberName == this.lastCallerMemberName && callerFilePath == this.lastCallerFilePath)
             {
                 Debug.WriteLine($"[Line:{callerLineNumber,6}] {info}");
             }
@@ -41,7 +41,7 @@ namespace Snap.Core.Logging
             {
                 string log = $"{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} | {callerFilePath} | {callerMemberName} |\n[Line:{callerLineNumber,6}] {info}";
 
-                if (lastCallerFilePath != callerFilePath)
+                if (this.lastCallerFilePath != callerFilePath)
                 {
                     Debug.Write('\n');
                 }
@@ -49,8 +49,8 @@ namespace Snap.Core.Logging
                 Debug.WriteLine(log);
             }
 
-            lastCallerMemberName = callerMemberName;
-            lastCallerFilePath = callerFilePath;
+            this.lastCallerMemberName = callerMemberName;
+            this.lastCallerFilePath = callerFilePath;
         }
 
         public static void LogStatic(object? info, Func<object?, string>? formatter = null,
